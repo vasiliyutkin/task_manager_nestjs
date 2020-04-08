@@ -6,9 +6,12 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Logger } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+  private logger: Logger = new Logger('UserRepository');
+
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
@@ -19,10 +22,13 @@ export class UserRepository extends Repository<User> {
 
     try {
       await user.save();
-      console.log(user);
+      this.logger.debug(`New User: "${JSON.stringify(user)}" created!`);
     } catch (error) {
       if (error.code === '23505') {
-        //duplicate username
+        this.logger.error(
+          `Duplicated username(${user.username}) appeared`,
+          (error as Error).stack,
+        );
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException();

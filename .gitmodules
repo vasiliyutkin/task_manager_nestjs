@@ -1,0 +1,3 @@
+[submodule "task_management_fe"]
+	path = task_management_fe
+	url = git@github.com:vasiliyutkin/task_management_fe.git

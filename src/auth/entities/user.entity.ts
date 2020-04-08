@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Task } from 'src/tasks/entities/task.entity';
+import { Task } from '../../tasks/entities/task.entity';
 
 @Entity()
 @Unique(['username'])
@@ -25,6 +25,7 @@ export class User extends BaseEntity {
   salt: string;
 
   @OneToMany(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     task => Task,
     task => task.user,
     { eager: true },
